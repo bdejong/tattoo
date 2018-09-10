@@ -8,33 +8,27 @@ from datetime import date
 def digit_of_pi(which_digit):
     return int(math.pi * (10 ** which_digit)) % 10
 
-def cumulative_distance(index, scale, offset):
-    y = 0
-    for i in range(index):
-        y += digit_of_pi(i) * scale + offset
-    return y
+def get_distance(index, scale, offset):
+    return digit_of_pi(index) * scale + offset
 
-c = canvas.Canvas("tattoo.pdf", pagesize=A4)
+def draw_boxes(c):
+    c.rect((210 - 20) * mm, 10 * mm, 10 * mm, 10 * mm, stroke=1, fill=0)
+    c.drawString((210 - 19) * mm, 11 * mm, "1 cm", )
 
-c.setLineWidth(0.3)
-c.setFont('Helvetica', 8)
+    c.rect((210 - 60) * mm, 25 * mm, 50 * mm, 50 * mm, stroke=1, fill=0)
+    c.drawString((210 - 59)*mm, 26 * mm, "5 cm")
 
-c.rect((210 - 20) * mm, 10 * mm, 10 * mm, 10 * mm, stroke=1, fill=0)
-c.drawString((210 - 19) * mm, 11 * mm, "1 cm", )
-
-c.rect((210 - 60) * mm, 25 * mm, 50 * mm, 50 * mm, stroke=1, fill=0)
-c.drawString((210 - 59)*mm, 26 * mm, "5 cm")
-
-scale = 1
-offset = 2.5
-radius = 0.5
-margin = 10
+def create_page(c):
+    c.setLineWidth(0.3)
+    c.setFont('Helvetica', 8)
+    draw_boxes(c)
+    c.setLineWidth(0.7)
 
 def special_date_in_range(start, end):
     special_dates = [
         date(1978, 6, 21), # Birthday
         date(1985, 7, 1), # Suriname
-        date(2003, 5, 5), # Ingrid TODO FIXME
+        date(2003, 7, 1), # Ingrid
         date(2010, 5, 10), # Annelies
         date(2015, 9, 3), # Flux
         date(2017, 3, 6), # Volt
@@ -46,23 +40,35 @@ def special_date_in_range(start, end):
     
     return False
 
-c.setLineWidth(0.7)
+SCALE = 1.3
+OFFSET = 2.1
+RADIUS = 0.4
+MARGIN = 10
 
-for i in range(100):
-    year_start, year_end = date(1978 + i, 6, 21), date(1978 + i + 1, 6, 21)
-    x = 10
-    y = cumulative_distance(i, scale, offset) + margin
+c = canvas.Canvas("tattoo.pdf", pagesize=A4)
+create_page(c)
 
-    if y >= 297 or i > 40:
-        # c.drawString(x * mm, (margin/2) * mm, "{0}".format(i - 1))
-        break
+i = 0
+x = 10
+y = 0
+
+while i < 100:
+    is_special = special_date_in_range(date(1978 + i, 6, 21), date(1978 + i + 1, 6, 21))
     
-    # c.drawString((x + 5) * mm, y * mm, "{0} {1}".format(year_start, year_end))
+    c.drawString((x + 15) * mm, (y + MARGIN - 1) * mm, "life: {0} pi: {1} year: {2}".format(i, digit_of_pi(i), 1978 + i))
 
-    if special_date_in_range(year_start, year_end):
-        c.line((x-radius*2) * mm, y * mm, (x+radius*2) * mm, y * mm)
+    if is_special:
+        c.line((x - RADIUS * 2) * mm, (y + MARGIN) * mm, (x + RADIUS * 2) * mm, (y + MARGIN) * mm)
     else:
-        c.circle(x * mm, y * mm, radius * mm, stroke=1, fill=1)
+        c.circle(x * mm, (y + MARGIN) * mm, RADIUS * mm, stroke=1, fill=1)
+    
+    y += get_distance(i, SCALE, OFFSET)
+    i += 1
 
+    if y >= 297 - 2 * MARGIN:
+        c.showPage()
+        y = 0
+        i -= 3
+        create_page(c)
 
 c.save()
