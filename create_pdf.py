@@ -20,7 +20,7 @@ def draw_boxes(c):
 
 def create_page(c):
     c.setLineWidth(0.3)
-    c.setFont('Helvetica', 8)
+    c.setFont('Courier', 5)
     draw_boxes(c)
     c.setLineWidth(0.7)
 
@@ -40,8 +40,8 @@ def special_date_in_range(start, end):
     
     return False
 
-SCALE = 1.3
-OFFSET = 2.1
+SCALE = 1.1
+OFFSET = 1.9
 RADIUS = 0.4
 MARGIN = 10
 
@@ -55,13 +55,28 @@ y = 0
 while i < 100:
     is_special = special_date_in_range(date(1978 + i, 6, 21), date(1978 + i + 1, 6, 21))
     
-    c.drawString((x + 15) * mm, (y + MARGIN - 1) * mm, "life: {0} pi: {1} year: {2}".format(i, digit_of_pi(i), 1978 + i))
+    text_x = (x + 15) * mm
+    text_y = (y + MARGIN - 1 + 1) * mm
+    text = "life: {0}   pi: {1}   year: {2}   from: {3}   to: {4}".format(
+        i,
+        digit_of_pi(i),
+        1978 + i,
+        date(1978 + i, 6, 21),
+        date(1978 + i + 1, 6, 21)
+    )
 
+    c.drawString(text_x, text_y, text)
+
+    dot_y = (y + MARGIN) * mm
     if is_special:
-        c.line((x - RADIUS * 2) * mm, (y + MARGIN) * mm, (x + RADIUS * 2) * mm, (y + MARGIN) * mm)
+        c.line((x - RADIUS * 2) * mm, dot_y, (x + RADIUS * 2) * mm, dot_y)
+        dot_x_max = (x + RADIUS * 2) * mm
     else:
         c.circle(x * mm, (y + MARGIN) * mm, RADIUS * mm, stroke=1, fill=1)
+        dot_x_max = (x + RADIUS) * mm
     
+    c.line(dot_x_max + 5*mm, dot_y, text_x - mm, text_y)
+
     y += get_distance(i, SCALE, OFFSET)
     i += 1
 
