@@ -32,6 +32,7 @@ def special_date_in_range(start, end):
         date(2010, 5, 10), # Annelies
         date(2015, 9, 3), # Flux
         date(2017, 3, 6), # Volt
+        date(2019, 11, 2), # Lumen
     ]
 
     for special_date in special_dates:
@@ -52,18 +53,25 @@ i = 0
 x = 10
 y = 0
 
-while i < 100:
+debug = False
+
+while i <= 41:
     is_special = special_date_in_range(date(1978 + i, 6, 21), date(1978 + i + 1, 6, 21))
     
     text_x = (x + 15) * mm
     text_y = (y + MARGIN - 1 + 1) * mm
-    text = "life: {0}   pi: {1}   year: {2}   from: {3}   to: {4}".format(
-        i,
-        digit_of_pi(i),
-        1978 + i,
-        date(1978 + i, 6, 21),
-        date(1978 + i + 1, 6, 21)
-    )
+    
+    if debug:
+        text = "life: {0}   pi: {1}   year: {2}   from: {3}   to: {4}  cm: {5}".format(
+            i,
+            digit_of_pi(i),
+            1978 + i,
+            date(1978 + i, 6, 21),
+            date(1978 + i + 1, 6, 21),
+            y
+        )
+    else:
+        text = "life: {0}".format(i)
 
     c.drawString(text_x, text_y, text)
 
@@ -83,7 +91,7 @@ while i < 100:
     if y >= 297 - 2 * MARGIN:
         c.showPage()
         y = 0
-        i -= 3
+        i -= 20
         create_page(c)
 
 c.save()
