@@ -53,8 +53,6 @@ i = 0
 x = 10
 y = 0
 
-debug = False
-
 while i <= 41:
     is_special = special_date_in_range(date(1978 + i, 6, 21), date(1978 + i + 1, 6, 21))
     
