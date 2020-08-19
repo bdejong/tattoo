@@ -59,7 +59,7 @@ while i <= 41:
     text_x = (x + 15) * mm
     text_y = (y + MARGIN - 1 + 1) * mm
     
-    text = "age: {0}   pi: {1}   can be tattooed after: {3}".format(
+    text = "age: {0}   pi: {1}   can be tattooed after: {2}".format(
         i + 1,
         digit_of_pi(i),
         date(1978 + i + 1, 6, 21)
