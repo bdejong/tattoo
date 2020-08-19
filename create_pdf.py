@@ -61,17 +61,11 @@ while i <= 41:
     text_x = (x + 15) * mm
     text_y = (y + MARGIN - 1 + 1) * mm
     
-    if debug:
-        text = "life: {0}   pi: {1}   year: {2}   from: {3}   to: {4}  cm: {5}".format(
-            i,
-            digit_of_pi(i),
-            1978 + i,
-            date(1978 + i, 6, 21),
-            date(1978 + i + 1, 6, 21),
-            y
-        )
-    else:
-        text = "life: {0}".format(i)
+    text = "age: {0}   pi: {1}   can be tattooed after: {3}".format(
+        i + 1,
+        digit_of_pi(i),
+        date(1978 + i + 1, 6, 21)
+    )
 
     c.drawString(text_x, text_y, text)
 
