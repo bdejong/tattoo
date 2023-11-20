@@ -53,7 +53,7 @@ i = 0
 x = 10
 y = 0
 
-while i <= 41:
+while i <= 50:
     is_special = special_date_in_range(date(1978 + i, 6, 21), date(1978 + i + 1, 6, 21))
     
     text_x = (x + 15) * mm
